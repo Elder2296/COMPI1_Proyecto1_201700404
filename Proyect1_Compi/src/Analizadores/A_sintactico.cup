@@ -1,0 +1,65 @@
+/*--------------- 1ra Area: Codigo de Usuario -----------------------*/
+//-------> importaciones, paquetes
+package Analizadores;
+import java_cup.runtime.Symbol;
+
+//------> Codigo para el parser,variables, metodos
+parser code
+{:
+    private Symbol s;
+    
+    public void syntax_error(Symbol s){
+        this.s = s;
+    }
+
+    public Symbol getS(){
+        return this.s;
+
+:}
+
+//------> Codigo para las acciones gramaticales
+action code
+{:  :}
+
+/*--------------- 2da Area: Declaraciones -----------------------*/
+
+//------> declaracion de terminales 
+
+terminal dos_puntos, 
+        flecha, 
+        del_al,
+        puntoYcoma, 
+        concatenar,
+        kleen,
+        or,
+        llaveAbre,
+        llaveCierra,
+        porciento,
+        conjunto,
+        digito,
+        id,
+        cadena,
+        comenSimple,
+        comenMulti,
+        suma;
+
+//------> declaracion de no terminales
+non terminal String INICIO, 
+                    SENTENCIAS,
+                    SENTENCIA;
+                    
+
+start with INICIO;
+
+/*--------------- 3ra Area: Reglas Semanticas -----------------------*/
+INICIO ::= llaveAbre llaveCierra
+        ;
+
+
+ 
+
+
+
+
+
+
