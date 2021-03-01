@@ -14,8 +14,11 @@ import java_cup.runtime.*;
 
 digito              = [0-9]+
 letra               = [a-zA-ZÑñ]+
+raro                = [!,#,$,&,',-,/,<,=,>,@,^,_,`,]
 id                  = {letra}({letra}|{digito}|"_")*
 cadena              = [\"][^\"\n]+[\"]
+raros               =({letra}|{digito}|{raro})+
+
 
 
 
@@ -47,7 +50,7 @@ comentariomulti     = "<!"({InputCharacter}* {LineTerminator})+"!>"
 {digito}    { System.out.println("Reconocio "+yytext()+" digito"); return new Symbol(Simbolos.digito, yycolumn, yyline, yytext()); }
 {cadena}    { System.out.println("Reconocio "+yytext()+" cadena"); return new Symbol(Simbolos.cadena, yycolumn, yyline, yytext()); }
 {id}        { System.out.println("Reconocio "+yytext()+" id"); return new Symbol(Simbolos.id, yycolumn, yyline, yytext()); }
-
+{raros}     { System.out.println("Reconocio "+yytext()+" raros"); return new Symbol(Simbolos.raros, yycolumn, yyline, yytext()); }
 {comentariosimple}      { System.out.println("Reconocio "+yytext()+" comenSimple"); return new Symbol(Simbolos.comenSimple, yycolumn, yyline, yytext()); }
 {comentariomulti}       { System.out.println("Reconocio "+yytext()+" comenMulti"); return new Symbol(Simbolos.comenMulti, yycolumn, yyline, yytext()); }
 

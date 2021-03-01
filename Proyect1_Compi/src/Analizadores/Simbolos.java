@@ -11,6 +11,7 @@ public class Simbolos {
   public static final int kleen = 7;
   public static final int cadena = 15;
   public static final int conjunto = 12;
+  public static final int raros = 18;
   public static final int comenMulti = 17;
   public static final int puntoYcoma = 5;
   public static final int flecha = 3;
@@ -25,7 +26,7 @@ public class Simbolos {
   public static final int error = 1;
   public static final int concatenar = 6;
   public static final int porciento = 11;
-  public static final int suma = 18;
+  public static final int suma = 19;
   public static final int del_al = 4;
   public static final String[] terminalNames = new String[] {
   "EOF",
@@ -46,6 +47,7 @@ public class Simbolos {
   "cadena",
   "comenSimple",
   "comenMulti",
+  "raros",
   "suma"
   };
 }

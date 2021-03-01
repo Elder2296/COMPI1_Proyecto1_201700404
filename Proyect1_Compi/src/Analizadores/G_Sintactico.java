@@ -14,9 +14,9 @@ public class G_Sintactico {
     public static void main(String[] args) {
             String[] opciones = new String[7];
             
-            opciones[0]="-parser";
+            opciones[0]="-destdir";
             
-            opciones[1]="src/Analizadores";
+            opciones[1]="C:/Users/elari/Desktop/2021/1er Semestre/Lab Compi1/Proyecto 1/COMPI1_Proyecto1_201700404/Proyect1_Compi/src/Analizadores";
             
             opciones[2]="-symbols";
             
@@ -26,7 +26,7 @@ public class G_Sintactico {
             
             opciones[5]="Sintactico";
             
-            opciones[6]="src/Analizadores/A_sintactico.cup";
+            opciones[6]="C:/Users/elari/Desktop/2021/1er Semestre/Lab Compi1/Proyecto 1/COMPI1_Proyecto1_201700404/Proyect1_Compi/src/Analizadores/A_sintactico.cup";
             try{
                 java_cup.Main.main(opciones);
             

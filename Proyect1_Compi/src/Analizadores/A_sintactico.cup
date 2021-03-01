@@ -6,14 +6,7 @@ import java_cup.runtime.Symbol;
 //------> Codigo para el parser,variables, metodos
 parser code
 {:
-    private Symbol s;
-    
-    public void syntax_error(Symbol s){
-        this.s = s;
-    }
-
-    public Symbol getS(){
-        return this.s;
+   
 
 :}
 
@@ -41,22 +34,42 @@ terminal dos_puntos,
         cadena,
         comenSimple,
         comenMulti,
+        raros,
         suma;
 
 //------> declaracion de no terminales
-non terminal String INICIO, 
-                    SENTENCIAS,
-                    SENTENCIA;
+non terminal    INICIO, 
+                SENTENCIAS,
+                CONJUNTO,
+                COMENTARIOS;
                     
 
 start with INICIO;
 
 /*--------------- 3ra Area: Reglas Semanticas -----------------------*/
-INICIO ::= llaveAbre llaveCierra
+INICIO ::= llaveAbre:a SENTENCIAS llaveCierra:b {: System.out.print("valor de a: "+a+"valor de b: "+b);:}
         ;
 
+SENTENCIAS      ::=     SENTENCIAS CONJUNTO
+                        | CONJUNTO
+                        | SENTENCIAS COMENTARIOS
+                        | COMENTARIOS
+                        | SENTENCIAS DEF_EXP_REG
+                        | DEF_EXP_REG
+                        ;
 
- 
+
+
+COMENTARIOS     ::=     comenSimple  
+                        | comenMulti    
+                        ;
+
+CONJUNTO        ::=      conjunto dos_puntos id flecha id del_al id puntoYcoma
+                         | conjunto dos_puntos id flecha digito del_al digito puntoYcoma
+                         | conjunto dos_puntos id flecha raros del_al raros puntoYcoma
+                        ;
+
+                
 
 
 
