@@ -14,7 +14,7 @@ import java_cup.runtime.*;
 
 digito              = [0-9]+
 letra               = [a-zA-ZÑñ]+
-raro                = [!,#,$,&,',-,/,<,=,>,@,^,_,`,]
+raro                = [!,#,$,&,',-,/,<,=,>,@,_,`,]
 id                  = {letra}({letra}|{digito}|"_")*
 cadena              = [\"][^\"\n]+[\"]
 raros               =({letra}|{digito}|{raro})+
@@ -23,10 +23,11 @@ raros               =({letra}|{digito}|{raro})+
 
 
 LineTerminator = \r|\n|\r\n
-InputCharacter = [^\r\n]
+inputstream = [^\r\n]
 
-comentariosimple    = "//" {InputCharacter}* {LineTerminator}?
-comentariomulti     = "<!"({InputCharacter}* {LineTerminator})+"!>"
+
+comentariosimple    = "//" {inputstream}* {LineTerminator}?
+comentariomulti     = "<!"({inputstream}* {LineTerminator})+"!>"
 
 %%
 
@@ -40,18 +41,21 @@ comentariomulti     = "<!"({InputCharacter}* {LineTerminator})+"!>"
 "|"         { System.out.println("Reconocio "+yytext()+" or"); return new Symbol(Simbolos.or, yycolumn, yyline, yytext()); }
 "{"         { System.out.println("Reconocio "+yytext()+" llaveAbre"); return new Symbol(Simbolos.llaveAbre, yycolumn, yyline, yytext()); }
 "}"         { System.out.println("Reconocio "+yytext()+" llaveCierra"); return new Symbol(Simbolos.llaveCierra, yycolumn, yyline, yytext()); }
-"%"         { System.out.println("Reconocio "+yytext()+" porciento"); return new Symbol(Simbolos.porciento, yycolumn, yyline, yytext()); }
+"%%"         { System.out.println("Reconocio "+yytext()+" porciento"); return new Symbol(Simbolos.porciento, yycolumn, yyline, yytext()); }
 "+"         { System.out.println("Reconocio "+yytext()+" suma"); return new Symbol(Simbolos.suma, yycolumn, yyline, yytext()); }
+"?"         { System.out.println("Reconocio "+yytext()+" interrogacion"); return new Symbol(Simbolos.interrogacion, yycolumn, yyline, yytext()); }
 
 
 //----->Palabras Reservadas
 "CONJ"  { System.out.println("Reconocio "+yytext()+" Palabra Reservada"); return new Symbol(Simbolos.conjunto, yycolumn, yyline, yytext()); }
 
+
+  
 {digito}    { System.out.println("Reconocio "+yytext()+" digito"); return new Symbol(Simbolos.digito, yycolumn, yyline, yytext()); }
 {cadena}    { System.out.println("Reconocio "+yytext()+" cadena"); return new Symbol(Simbolos.cadena, yycolumn, yyline, yytext()); }
 {id}        { System.out.println("Reconocio "+yytext()+" id"); return new Symbol(Simbolos.id, yycolumn, yyline, yytext()); }
 {raros}     { System.out.println("Reconocio "+yytext()+" raros"); return new Symbol(Simbolos.raros, yycolumn, yyline, yytext()); }
-{comentariosimple}      { System.out.println("Reconocio "+yytext()+" comenSimple"); return new Symbol(Simbolos.comenSimple, yycolumn, yyline, yytext()); }
-{comentariomulti}       { System.out.println("Reconocio "+yytext()+" comenMulti"); return new Symbol(Simbolos.comenMulti, yycolumn, yyline, yytext()); }
+{comentariosimple}      { System.out.println("Reconocio "+yytext()+" comenSimple"); }
+{comentariomulti}       { System.out.println("Reconocio "+yytext()+" comenMulti");  }
 
 [ \t\r\n\f]             {/*Espacios en blaco, se ignoran*/}

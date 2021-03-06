@@ -26,7 +26,8 @@ public class Simbolos {
   public static final int error = 1;
   public static final int concatenar = 6;
   public static final int porciento = 11;
-  public static final int suma = 19;
+  public static final int interrogacion = 19;
+  public static final int suma = 20;
   public static final int del_al = 4;
   public static final String[] terminalNames = new String[] {
   "EOF",
@@ -48,6 +49,7 @@ public class Simbolos {
   "comenSimple",
   "comenMulti",
   "raros",
+  "interrogacion",
   "suma"
   };
 }

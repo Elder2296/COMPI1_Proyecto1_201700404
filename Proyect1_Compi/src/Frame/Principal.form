@@ -25,16 +25,18 @@
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" attributes="0">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="102" alignment="0" attributes="0">
-                      <EmptySpace min="-2" pref="295" max="-2" attributes="0"/>
-                      <Component id="btnAnalizar" min="-2" pref="154" max="-2" attributes="0"/>
-                  </Group>
-                  <Group type="102" alignment="0" attributes="0">
+                  <Group type="102" attributes="0">
                       <EmptySpace min="-2" pref="35" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Component id="jLabel1" alignment="0" min="-2" pref="753" max="-2" attributes="0"/>
                           <Component id="jScrollPane1" min="-2" pref="437" max="-2" attributes="0"/>
                       </Group>
+                  </Group>
+                  <Group type="102" alignment="0" attributes="0">
+                      <EmptySpace min="-2" pref="70" max="-2" attributes="0"/>
+                      <Component id="btnAnalizar1" min="-2" pref="154" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="35" max="-2" attributes="0"/>
+                      <Component id="btnReportes" min="-2" pref="154" max="-2" attributes="0"/>
                   </Group>
               </Group>
               <EmptySpace pref="189" max="32767" attributes="0"/>
@@ -47,7 +49,10 @@
               <EmptySpace min="-2" pref="89" max="-2" attributes="0"/>
               <Component id="jScrollPane1" min="-2" pref="263" max="-2" attributes="0"/>
               <EmptySpace type="separate" max="-2" attributes="0"/>
-              <Component id="btnAnalizar" min="-2" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="btnAnalizar1" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="btnReportes" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
               <EmptySpace min="-2" pref="56" max="-2" attributes="0"/>
               <Component id="jLabel1" min="-2" pref="41" max="-2" attributes="0"/>
               <EmptySpace pref="114" max="32767" attributes="0"/>
@@ -71,18 +76,26 @@
         </Component>
       </SubComponents>
     </Container>
-    <Component class="javax.swing.JButton" name="btnAnalizar">
+    <Component class="javax.swing.JButton" name="btnReportes">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Analizar"/>
+        <Property name="text" type="java.lang.String" value="Reportes"/>
       </Properties>
       <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnAnalizarActionPerformed"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnReportesActionPerformed"/>
       </Events>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel1">
       <Properties>
         <Property name="text" type="java.lang.String" value="jLabel1"/>
       </Properties>
+    </Component>
+    <Component class="javax.swing.JButton" name="btnAnalizar1">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Analizar"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnAnalizar1ActionPerformed"/>
+      </Events>
     </Component>
   </SubComponents>
 </Form>
