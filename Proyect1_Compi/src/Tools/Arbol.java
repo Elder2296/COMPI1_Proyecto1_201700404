@@ -49,7 +49,8 @@ public class Arbol {
         this.anul_de_Ramas(this.raiz);
         String grafica= "Digraph Arbol_Sintactio {\n\n"+Graficar(this.raiz,"0")+this.direc+"\n\n}";
         this.GenerarDot(grafica, this.nombre);
-        this.verTablaSiguientes();
+        //this.verTablaSiguientes();
+        this.GenerarDotSiguientes(this.generarTablaSiguientes(), this.nombre);
         
     }
     private String Graficar(Nodo nodo,String i){
@@ -534,6 +535,77 @@ public class Arbol {
         }
     }
     
+    public String generarTablaSiguientes(){
+        String result="";
+        result="digraph G{\n\n";
+        result+="node[ shape=record, fontname=\"Arial\"];\n ";
+        String col1="";
+        String col2="";
+        String col3="";
+        for (Siguiente elemento: this.siguientes){
+            if(col1.equals("") && col2.equals("") && col3.equals("")){
+                col1="No.";
+                col2="Terminal";
+                col3="Follow";
+            }else{
+            
+                col1+="|"+elemento.getId();
+                
+                
+                
+                
+                col2+="|"+elemento.getTerminal().replace("\"", "'");
+                
+                String fol="";
+                
+                
+                for (int i = 0; i < elemento.getFollows().size(); i++) {
+                    if(fol.equals("")){
+                        fol+=elemento.getFollows().get(i).toString();
+                    }else{
+                        fol+=", "+elemento.getFollows().get(i).toString();
+                    }
+                    
+                }
+                col3+="|"+fol;
+            }
+        }
+        
+        result+="set1 [label=\"{"+col1+"} | {"+col2+"}|{"+col3+"}\"];";
+        result+="\n}";
+        
+        return result;
+    }
+    private void GenerarDotSiguientes(String cadena,String nombre){
+        FileWriter fichero = null;
+        BufferedWriter bw=null;
+        try{
+            String ruta="C:/Users/elari/Desktop/2021/1er Semestre/ReportesCompi1/Siguientes_201700404/";
+            File file =new File(ruta+nombre+".dot");
+            if(!file.exists()){
+                file.createNewFile();
+            }
+            
+            
+            
+            fichero = new FileWriter(file);
+            
+            bw =new BufferedWriter(fichero);
+            
+            bw.write(cadena);
+            bw.close();
+            fichero.close();
+            Ejecutar(ruta,nombre);
+//            escritor = new PrintWriter(fichero);
+//            escritor.println(cadena);
+//            escritor.close();
+//            fichero.close();
+//            Ejecutar(nombre);
+        } catch (Exception e) {
+            System.out.println("error en generar dot");
+            e.printStackTrace();
+        }
+    }
     
     
 }
