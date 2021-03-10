@@ -6,6 +6,7 @@
 package Tools;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -17,6 +18,11 @@ public class Nodo {
     public int id; 
     public Nodo hijoIzq;
     public Nodo hijoDer;
+    private ArrayList<Integer> first=new ArrayList();
+    private ArrayList<Integer> last=new ArrayList();
+    
+    
+    private char anulabilidad;
     
     public ArrayList<Nodo> hijos = new ArrayList<Nodo>();
     
@@ -25,6 +31,12 @@ public class Nodo {
         this.lexema = lexema;
         this.hijoIzq = hijoIzq;
         this.hijoDer = hijoDer;
+        this.id=id;
+        this.anulabilidad=' ';
+        if(id!=-1){
+            this.first.add(id);
+            this.last.add(id);
+        }
         
         if(hijoIzq != null){
         this.hijos.add(hijoIzq);
@@ -34,6 +46,46 @@ public class Nodo {
         }
         
     }
+
+    public ArrayList<Integer> getFirst() {
+        return first;
+    }
+
+    public void setFirst(ArrayList<Integer> first) {
+        this.first = first;
+    }
+
+    public List<Integer> getLast() {
+        return last;
+    }
+
+    public void setLast(ArrayList<Integer> last) {
+        this.last = last;
+    }
+    public void setAnulabilidad(char anul){
+        this.anulabilidad=anul;
+    }
+    public char getAnulabilidad(){
+        return this.anulabilidad;
+    }
+
+    public Nodo getHijoIzq() {
+        return hijoIzq;
+    }
+
+    public void setHijoIzq(Nodo hijoIzq) {
+        this.hijoIzq = hijoIzq;
+    }
+
+    public Nodo getHijoDer() {
+        return hijoDer;
+    }
+
+    public void setHijoDer(Nodo hijoDer) {
+        this.hijoDer = hijoDer;
+    }
+    
+    
     
     
 }

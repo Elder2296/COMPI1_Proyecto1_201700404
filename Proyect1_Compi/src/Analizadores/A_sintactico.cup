@@ -2,12 +2,18 @@
 //-------> importaciones, paquetes
 package Analizadores;
 import java_cup.runtime.Symbol;
-import Tools.error;
+import Tools.*;
 import Frame.Principal;
+
+import java.util.LinkedList;
 
 //------> Codigo para el parser,variables, metodos
 parser code
 {:
+        public static Nodo raiz;
+        public static LinkedList<Expresion> lista_er;
+        public int nhojas=1;
+
         public void syntax_error(Symbol s)
         {
             System.err.println("Error en la Linea " + (s.right+1) +" Columna "+(s.left+1)+ ". Identificador "+s.value + " no reconocido. Se ha recuperado del error." );
@@ -19,6 +25,9 @@ parser code
             System.err.println("Error en la Linea " + (s.right+1)+ " Columna "+(s.left+1)+". Identificador " +s.value + " no reconocido.");
             error nuevo = new error("Error Sintactico", s.value.toString(), s.right+1, s.left+1);
             Principal.listaErrores.add(nuevo);
+        }
+        public Nodo getRaiz(){
+            return raiz;
         }
 
 :}
@@ -32,7 +41,8 @@ action code
 //------> declaracion de terminales 
 
 terminal dos_puntos, 
-        flecha, 
+        guion,
+        mayorque,
         del_al,
         puntoYcoma, 
         concatenar,
@@ -45,21 +55,20 @@ terminal dos_puntos,
         digito,
         id,
         cadena,
-        comenSimple,
-        comenMulti,
         raros,
         interrogacion,
         suma;
 
 //------> declaracion de no terminales
-non terminal    INICIO, 
-                SENTENCIAS,
-                CONJUNTO,
-                COMENTARIOS,
-                DEF_EXP,
-                ER,
-                EVALUACIONES,
-                EVALUAR;
+non terminal LinkedList<Expresion>       INICIO, SENTENCIAS;
+
+non terminal Expresion                  DEF_EXP,CONJUNTO;
+
+non terminal Nodo                       ER;
+                
+non terminal                        
+                                    EVALUACIONES,
+                                    EVALUAR;
 
 
 precedence right concatenar;
@@ -70,41 +79,44 @@ precedence right kleen, suma,interrogacion;
 start with INICIO;
 
 /*--------------- 3ra Area: Reglas Semanticas -----------------------*/
-INICIO          ::=     llaveAbre:a SENTENCIAS porciento porciento EVALUACIONES  llaveCierra:b {: System.out.print("valor de a: "+a+"valor de b: "+b);:}
+INICIO          ::=     llaveAbre SENTENCIAS:a porciento porciento porciento porciento EVALUACIONES  llaveCierra  {: parser.lista_er=a;:}
                         | error;
 
-SENTENCIAS      ::=     SENTENCIAS CONJUNTO
-                        | CONJUNTO
-                        | SENTENCIAS DEF_EXP
-                        | DEF_EXP
+SENTENCIAS      ::=                                                              
+                        SENTENCIAS:a DEF_EXP:b                                                {:RESULT=a; RESULT.add(b); :}
+                        | DEF_EXP:a                                                             {:RESULT = new LinkedList<>();RESULT.add(a); :}
+                        | SENTENCIAS:a CONJUNTO:b                                                   {:RESULT=a;  :}
+                        | CONJUNTO:a                                                              {:RESULT = new LinkedList<>();:}
                         | error
                         ;
 
 EVALUACIONES    ::=     EVALUACIONES EVALUAR
                         | EVALUAR
+                        |error
                         ;   
 EVALUAR         ::=     id dos_puntos cadena puntoYcoma
                         ;
 
 
-DEF_EXP         ::=     id flecha ER puntoYcoma
+DEF_EXP         ::=     id:a guion mayorque ER:b puntoYcoma                                             {:RESULT = new Expresion(a.toString(), new Arbol(b,a.toString())); :}
+                        
                         ;
 
 
 
 
-ER              ::=     concatenar ER ER 
-                        | or ER ER
-                        | kleen ER 
-                        | suma ER 
-                        | interrogacion ER
-                        | llaveAbre id llaveCierra
-                        | cadena
+ER              ::=     concatenar ER:a ER:b                                                    {: RESULT= new Nodo(".","",-1,a,b); :}
+                        | or ER:a ER:b                                                          {: RESULT= new Nodo("|","",-1,a,b); :}
+                        | kleen ER:b                                                            {: RESULT= new Nodo("*","",-1,null,b); :}
+                        | suma ER:s                                                             {: RESULT= new Nodo("+","",-1,null,s); :}               
+                        | interrogacion ER:b                                                    {: RESULT= new Nodo("?","",-1,null,b); :}
+                        | llaveAbre id:a llaveCierra                                            {: Nodo nodo = new Nodo(a.toString(),"",parser.nhojas,null,null); nodo.setAnulabilidad('N');RESULT = nodo; parser.nhojas++; :}
+                        | cadena:a                                                              {: Nodo nodo = new Nodo(a.toString(),"",parser.nhojas,null,null); nodo.setAnulabilidad('N');RESULT = nodo; parser.nhojas++; :}
                         ;
 
-CONJUNTO        ::=      conjunto dos_puntos id flecha id del_al id puntoYcoma
-                         | conjunto dos_puntos id flecha digito del_al digito puntoYcoma
-                         | conjunto dos_puntos id flecha raros del_al raros puntoYcoma
+CONJUNTO        ::=      conjunto dos_puntos id guion mayorque id del_al id puntoYcoma
+                         | conjunto dos_puntos id guion mayorque digito del_al digito puntoYcoma
+                         | conjunto dos_puntos id guion mayorque raros del_al raros puntoYcoma
                         ;
 
                 

@@ -7,6 +7,8 @@ package Frame;
 
 import Analizadores.A_lexico;
 import Analizadores.Sintactico;
+import Tools.Expresion;
+import Tools.Nodo;
 import Tools.error;
 import java.awt.Desktop;
 import java.io.BufferedReader;
@@ -16,6 +18,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringReader;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java_cup.runtime.Symbol;
@@ -182,8 +185,29 @@ public class Principal extends javax.swing.JFrame {
 //                System.out.println(lexico.next_token());
 //            }
             
-            this.jLabel1.setText("Analisis correcto ");
+            
+            
+            LinkedList<Expresion> lista_er=sintactico.lista_er;
+            this.jLabel1.setText("Analisis correcto Nexpresiones: "+lista_er.size());
+            
+            for (int i = 0; i < lista_er.size(); i++) {
+                Nodo hijoder=new Nodo("#","",100,null,null);
+                hijoder.setAnulabilidad('N');
+                Nodo hijoizq=lista_er.get(i).getArbol().getRaiz();
+                Nodo nuevoPadre= new Nodo(".","",-1,hijoizq,hijoder);
+               
+                lista_er.get(i).getArbol().setRaiz(nuevoPadre);
+                if(lista_er.get(i)!=null){
+                    lista_er.get(i).getArbol().graficarSintactico();
+                    //System.out.println("Nodo Raiz: "+lista_er.get(i).getArbol().getRaiz().token);
+                }
+                
+            }
+            
+            
         }catch(Exception ex){
+            System.out.println(ex);
+            Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
             this.jLabel1.setText("Analisis incorrecto");
         }
     }//GEN-LAST:event_btnAnalizar1ActionPerformed

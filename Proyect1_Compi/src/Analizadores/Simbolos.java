@@ -8,32 +8,32 @@ package Analizadores;
 /** CUP generated class containing symbol constants. */
 public class Simbolos {
   /* terminals */
-  public static final int kleen = 7;
-  public static final int cadena = 15;
-  public static final int conjunto = 12;
-  public static final int raros = 18;
-  public static final int comenMulti = 17;
-  public static final int puntoYcoma = 5;
-  public static final int flecha = 3;
-  public static final int or = 8;
+  public static final int kleen = 8;
+  public static final int cadena = 16;
+  public static final int conjunto = 13;
+  public static final int raros = 17;
+  public static final int puntoYcoma = 6;
+  public static final int or = 9;
   public static final int dos_puntos = 2;
-  public static final int comenSimple = 16;
-  public static final int llaveAbre = 9;
-  public static final int digito = 13;
+  public static final int llaveAbre = 10;
+  public static final int guion = 3;
+  public static final int digito = 14;
   public static final int EOF = 0;
-  public static final int id = 14;
-  public static final int llaveCierra = 10;
+  public static final int id = 15;
+  public static final int llaveCierra = 11;
+  public static final int mayorque = 4;
   public static final int error = 1;
-  public static final int concatenar = 6;
-  public static final int porciento = 11;
-  public static final int interrogacion = 19;
-  public static final int suma = 20;
-  public static final int del_al = 4;
+  public static final int concatenar = 7;
+  public static final int porciento = 12;
+  public static final int interrogacion = 18;
+  public static final int suma = 19;
+  public static final int del_al = 5;
   public static final String[] terminalNames = new String[] {
   "EOF",
   "error",
   "dos_puntos",
-  "flecha",
+  "guion",
+  "mayorque",
   "del_al",
   "puntoYcoma",
   "concatenar",
@@ -46,8 +46,6 @@ public class Simbolos {
   "digito",
   "id",
   "cadena",
-  "comenSimple",
-  "comenMulti",
   "raros",
   "interrogacion",
   "suma"
