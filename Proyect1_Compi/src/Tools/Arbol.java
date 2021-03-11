@@ -5,6 +5,7 @@
  */
 package Tools;
 
+import Frame.Principal;
 import java.awt.Desktop;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -14,6 +15,8 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import Frame.InfoImage;
+
 
 /**
  *
@@ -24,12 +27,18 @@ public class Arbol {
     public String nombre;
     private String direc;
     private LinkedList<Siguiente> siguientes;
+    private LinkedList<Traslado> traslados;
+    private int cont;
+    LinkedList<Traslado> tabladetraslados;
     
     public Arbol(Nodo raiz,String Nombre) {
         this.raiz = raiz;
         this.nombre=Nombre;
         this.direc="";
         this.siguientes=new LinkedList();
+        this.traslados=new LinkedList();
+        this.cont=-1;
+        this.tabladetraslados=new LinkedList();
     }
 
     public String getNombre() {
@@ -51,6 +60,7 @@ public class Arbol {
         this.GenerarDot(grafica, this.nombre);
         //this.verTablaSiguientes();
         this.GenerarDotSiguientes(this.generarTablaSiguientes(), this.nombre);
+        //this.generarTabladeTransiciones();
         
     }
     private String Graficar(Nodo nodo,String i){
@@ -128,7 +138,7 @@ public class Arbol {
             bw.write(cadena);
             bw.close();
             fichero.close();
-            Ejecutar(ruta,nombre);
+            Ejecutar(ruta,nombre,1);
 //            escritor = new PrintWriter(fichero);
 //            escritor.println(cadena);
 //            escritor.close();
@@ -139,7 +149,7 @@ public class Arbol {
             e.printStackTrace();
         }
     }
-    public void Ejecutar(String filepath,String filename) throws IOException {
+    public void Ejecutar(String filepath,String filename,int tipoOper) throws IOException {
         
         String file_input_path = filepath+filename+".dot";
         String do_path = "C:\\Program Files (x86)\\Graphviz2.38\\bin\\dot.exe";
@@ -150,6 +160,14 @@ public class Arbol {
             pBuilder = new ProcessBuilder(do_path, "-Tjpg", "-o", file_get_path, file_input_path);
             pBuilder.redirectErrorStream(true);
             pBuilder.start();
+            InfoImage info=new InfoImage(file_get_path,filename);
+            
+            if(tipoOper==1){
+                Principal.Arboles.add(info);
+            }else if(tipoOper==2){
+                Principal.grafosSiguientes.add(info);
+            }
+            
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -539,15 +557,11 @@ public class Arbol {
         String result="";
         result="digraph G{\n\n";
         result+="node[ shape=record, fontname=\"Arial\"];\n ";
-        String col1="";
-        String col2="";
-        String col3="";
+        String col1="No.";
+        String col2="Terminal";
+        String col3="Follow";
         for (Siguiente elemento: this.siguientes){
-            if(col1.equals("") && col2.equals("") && col3.equals("")){
-                col1="No.";
-                col2="Terminal";
-                col3="Follow";
-            }else{
+            
             
                 col1+="|"+elemento.getId();
                 
@@ -568,7 +582,7 @@ public class Arbol {
                     
                 }
                 col3+="|"+fol;
-            }
+            
         }
         
         result+="set1 [label=\"{"+col1+"} | {"+col2+"}|{"+col3+"}\"];";
@@ -595,17 +609,84 @@ public class Arbol {
             bw.write(cadena);
             bw.close();
             fichero.close();
-            Ejecutar(ruta,nombre);
-//            escritor = new PrintWriter(fichero);
-//            escritor.println(cadena);
-//            escritor.close();
-//            fichero.close();
-//            Ejecutar(nombre);
+            Ejecutar(ruta,nombre,2);
+
         } catch (Exception e) {
             System.out.println("error en generar dot");
             e.printStackTrace();
         }
     }
+    
+    public void generarTabladeTransiciones(){
+        LinkedList<Terminal> lista=this.getTerminales();
+        
+        
+        
+        Estado init=new Estado(this.generarEstado());
+        System.out.println("Firsts de la raiz\n");
+        for (int i = 0; i < this.raiz.getFirst().size(); i++) {
+            //System.out.println(this.raiz.getFirst().get(i));
+            init.addElement(this.raiz.getFirst().get(i));
+        }
+        Traslado inicial=new Traslado(init,lista);
+        
+        this.tabladetraslados.add(inicial);
+        boolean salida=false;
+        while(salida!=true){
+            for (int i = 0; i < this.traslados.size(); i++) {
+                if(this.traslados.get(i).getEstado().getUtilizada()=='N'){
+                    for(int j = 0;j<this.traslados.get(i).getEstado().getElementos().size();j++){//recorrer los elementos del estado
+                        for (int k = 0; k < this.siguientes.size(); k++) {
+                            if(this.traslados.get(i).getEstado().getElementos().get(j)==this.siguientes.get(k).getId()){
+                                //aqui se comparan los elementos de los estados con los ids de la table de siguientes
+                            }
+                            
+                        }
+                    }
+                    
+                }
+                
+            }
+            
+            salida=true;
+        }
+        System.out.println("SI SALIO XD");
+        
+        
+        
+    }
+    public String generarEstado(){
+        this.cont++;
+        return "S"+this.cont;
+    }
+    
+    public LinkedList<Terminal> getTerminales(){
+        LinkedList<Terminal> aux=new LinkedList();
+        int c=0;
+        for (Siguiente element: this.siguientes){
+            if(c==0){
+                aux.add(new Terminal(element.getTerminal()));
+            }
+            else{
+                int encontro=0;
+                for (int i = 0; i < aux.size(); i++) {
+                    if(aux.get(i).getTerminal().equals(element.getTerminal()) || element.getTerminal().equals("#")){
+                        encontro=1;
+                    }
+                    
+                }
+                
+                if(encontro==0){
+                    aux.add(new Terminal(element.getTerminal()));
+                }
+             }
+            c++;
+        }
+        return aux;
+    }
+    
+    
+    
     
     
 }
