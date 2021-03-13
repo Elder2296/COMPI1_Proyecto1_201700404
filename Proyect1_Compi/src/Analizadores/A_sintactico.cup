@@ -55,14 +55,15 @@ terminal dos_puntos,
         digito,
         id,
         cadena,
-        raros,
         interrogacion,
-        suma;
+        suma,
+        coma,
+        raro;
 
 //------> declaracion de no terminales
 non terminal LinkedList<Expresion>       INICIO, SENTENCIAS;
 
-non terminal Expresion                  DEF_EXP,CONJUNTO;
+non terminal Expresion                  DEF_EXP,CONJUNTO,NOTACION;
 
 non terminal Nodo                       ER;
                 
@@ -72,8 +73,8 @@ non terminal
 
 
 precedence right concatenar;
-precedence right or;
-precedence right kleen, suma,interrogacion;
+precedence right or,del_al;
+precedence right kleen, suma,interrogacion,coma;
                     
 
 start with INICIO;
@@ -114,12 +115,17 @@ ER              ::=     concatenar ER:a ER:b                                    
                         | cadena:a                                                              {: Nodo nodo = new Nodo(a.toString(),"",parser.nhojas,null,null); nodo.setAnulabilidad('N');RESULT = nodo; parser.nhojas++; :}
                         ;
 
-CONJUNTO        ::=      conjunto dos_puntos id guion mayorque id del_al id puntoYcoma
-                         | conjunto dos_puntos id guion mayorque digito del_al digito puntoYcoma
-                         | conjunto dos_puntos id guion mayorque raros del_al raros puntoYcoma
+CONJUNTO        ::=      conjunto dos_puntos id guion mayorque NOTACION puntoYcoma
                         ;
 
-                
+
+NOTACION        ::=     NOTACION coma   NOTACION
+                        | NOTACION del_al NOTACION
+                        | id
+                        | digito
+                        | raro
+                        ;
+
 
 
 

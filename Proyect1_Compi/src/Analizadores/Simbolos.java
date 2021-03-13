@@ -9,9 +9,10 @@ package Analizadores;
 public class Simbolos {
   /* terminals */
   public static final int kleen = 8;
+  public static final int raro = 20;
   public static final int cadena = 16;
   public static final int conjunto = 13;
-  public static final int raros = 17;
+  public static final int coma = 19;
   public static final int puntoYcoma = 6;
   public static final int or = 9;
   public static final int dos_puntos = 2;
@@ -25,8 +26,8 @@ public class Simbolos {
   public static final int error = 1;
   public static final int concatenar = 7;
   public static final int porciento = 12;
-  public static final int interrogacion = 18;
-  public static final int suma = 19;
+  public static final int interrogacion = 17;
+  public static final int suma = 18;
   public static final int del_al = 5;
   public static final String[] terminalNames = new String[] {
   "EOF",
@@ -46,9 +47,10 @@ public class Simbolos {
   "digito",
   "id",
   "cadena",
-  "raros",
   "interrogacion",
-  "suma"
+  "suma",
+  "coma",
+  "raro"
   };
 }
 

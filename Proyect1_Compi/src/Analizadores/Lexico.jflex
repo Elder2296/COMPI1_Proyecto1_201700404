@@ -1,5 +1,8 @@
 package Analizadores;
 import java_cup.runtime.*;
+
+import Tools.error;
+import Frame.Principal;
 %%
 %public 
 %class A_lexico
@@ -17,7 +20,7 @@ letra               = [a-zA-ZÑñ]+
 raro                = [!,#,$,&,',-,/,<,=,>,@,_,`,]
 id                  = {letra}({letra}|{digito}|"_")*
 cadena              = [\"][^\"\n]+[\"]
-raros               =({letra}|{digito}|{raro})+
+
 
 
 
@@ -46,6 +49,8 @@ comentariomulti     = "<!"({inputstream}* {LineTerminator})+"!>"
 "%"         { System.out.println("Reconocio "+yytext()+" porciento"); return new Symbol(Simbolos.porciento, yycolumn, yyline, yytext()); }
 "+"         { System.out.println("Reconocio "+yytext()+" suma"); return new Symbol(Simbolos.suma, yycolumn, yyline, yytext()); }
 "?"         { System.out.println("Reconocio "+yytext()+" interrogacion"); return new Symbol(Simbolos.interrogacion, yycolumn, yyline, yytext()); }
+","         { System.out.println("Reconocio "+yytext()+" coma"); return new Symbol(Simbolos.coma, yycolumn, yyline, yytext()); }
+
 
 
 //----->Palabras Reservadas
@@ -55,9 +60,17 @@ comentariomulti     = "<!"({inputstream}* {LineTerminator})+"!>"
   
 {digito}    { System.out.println("Reconocio "+yytext()+" digito"); return new Symbol(Simbolos.digito, yycolumn, yyline, yytext()); }
 {cadena}    { System.out.println("Reconocio "+yytext()+" cadena"); return new Symbol(Simbolos.cadena, yycolumn, yyline, yytext()); }
+{raro}    { System.out.println("Reconocio "+yytext()+" raro"); return new Symbol(Simbolos.raro, yycolumn, yyline, yytext()); }
+
+
+
 {id}        { System.out.println("Reconocio "+yytext()+" id"); return new Symbol(Simbolos.id, yycolumn, yyline, yytext()); }
-{raros}     { System.out.println("Reconocio "+yytext()+" raros"); return new Symbol(Simbolos.raros, yycolumn, yyline, yytext()); }
 {comentariosimple}      { System.out.println("Reconocio "+yytext()+" comenSimple"); }
 {comentariomulti}       { System.out.println("Reconocio "+yytext()+" comenMulti");  }
 
 [ \t\r\n\f]             {/*Espacios en blaco, se ignoran*/}
+
+.                       { System.out.println("Error Lexico"+yytext()+" Linea "+yyline+" Columna "+yycolumn); 
+                            error nuevo = new error("Error Sintactico (Recuperado)", yytext(), yyline, yycolumn);
+                            Principal.listaErrores.add(nuevo);
+                        }
