@@ -16,11 +16,21 @@ public class Estado {
     private String nombre;
     private LinkedList<Integer> elementos;
     private char utilizada;
+    private char aceptacion;
     
     public Estado(String nombre){
         this.nombre=nombre;
         this.elementos=new LinkedList();
         this.utilizada='N';
+        this.aceptacion='N';
+    }
+
+    public char getAceptacion() {
+        return aceptacion;
+    }
+
+    public void setAceptacion(char aceptacion) {
+        this.aceptacion = aceptacion;
     }
 
     public char getUtilizada() {

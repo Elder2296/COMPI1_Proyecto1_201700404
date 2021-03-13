@@ -63,6 +63,7 @@ public class Arbol {
         this.generarTabladeTransiciones();
         
         this.generarTablaTransiciones();
+        this.generarAFD();
         //this.comparacionListas();
         
     }
@@ -212,6 +213,8 @@ public class Arbol {
                 Principal.grafosSiguientes.add(info);
             }else if(tipoOper==3){
                 Principal.grafosTransiciones.add(info);
+            }else if(tipoOper==4){
+                Principal.grafosAFD.add(info);
             }
             
         } catch (Exception ex) {
@@ -842,7 +845,8 @@ public class Arbol {
 //            }
 //            cont++;
         }
-        System.out.println("******************************************");
+        this.determinarEstadosAceptacion();
+        //System.out.println("******************************************");
         //GENERA LA TABLA DE TRANSICIONES
         /*for (int i = 0; i < this.traslados.size(); i++) {
                 System.out.print(this.traslados.get(i).getEstado().getNombre()+" ");
@@ -991,6 +995,81 @@ public class Arbol {
             e.printStackTrace();
         }
         
+    
+    }
+    
+    public void determinarEstadosAceptacion(){
+        for (int i = 0; i < this.traslados.size(); i++) {
+            for (int j = 0; j < this.traslados.get(i).getEstado().getElementos().size(); j++) {
+                if(this.traslados.get(i).getEstado().getElementos().get(j)==100){
+                    this.traslados.get(i).getEstado().setAceptacion('A');
+                
+                }
+                
+            }
+            
+        }
+    }
+    
+    public void generarAFD(){
+        String resultado="digraph G{\n\n";
+        resultado+="rankdir= LR;\n";
+        for (int i = 0; i < this.traslados.size(); i++) {
+            if(this.traslados.get(i).getEstado().getAceptacion()=='A'){
+                resultado+="node [shape=doublecircle, label=\""+this.traslados.get(i).getEstado().getNombre()+"\"]"+
+                        this.traslados.get(i).getEstado().getNombre()+";\n";
+            }else{
+                resultado+="node [shape=circle, label=\""+this.traslados.get(i).getEstado().getNombre()+"\"]"+
+                        this.traslados.get(i).getEstado().getNombre()+";\n";
+            }
+            
+        }
+        
+        resultado+="\n\n";
+        
+        for (int i = 0; i < this.traslados.size(); i++) {
+            for (int j = 0; j < this.traslados.get(i).getTerminales().size(); j++) {
+                
+                if(this.traslados.get(i).getTerminales().get(j).getEstado()!=""){
+                    resultado+=this.traslados.get(i).getEstado().getNombre()+" -> "
+                            +this.traslados.get(i).getTerminales().get(j).getEstado()+
+                            " [ label=\""+this.traslados.get(i).getTerminales().get(j).getTerminal().replace("\"", "'")+"\"] \n";
+                }
+                
+            }
+            
+        }
+        
+        resultado+="}";
+        
+       this.generarDotAFD(resultado, this.nombre);
+    }
+    
+    public void generarDotAFD(String contenido,String nombre){
+        FileWriter fichero = null;
+        BufferedWriter bw=null;
+        try{
+            String ruta="C:/Users/elari/Desktop/2021/1er Semestre/ReportesCompi1/AFD_201700404/";
+            File file =new File(ruta+nombre+".dot");
+            if(!file.exists()){
+                file.createNewFile();
+            }
+            
+            
+            
+            fichero = new FileWriter(file);
+            
+            bw =new BufferedWriter(fichero);
+            
+            bw.write(contenido);
+            bw.close();
+            fichero.close();
+            Ejecutar(ruta,nombre,4);
+
+        } catch (Exception e) {
+            System.out.println("error en generar dot");
+            e.printStackTrace();
+        }
     
     }
     
