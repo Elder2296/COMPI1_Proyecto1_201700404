@@ -42,6 +42,9 @@ public class Estado {
     public void addElement(int sig){
         this.elementos.add(sig);
     }
+    public void setListaElementos(LinkedList<Integer> listado){
+        this.elementos=listado;
+    }
     
     
 }

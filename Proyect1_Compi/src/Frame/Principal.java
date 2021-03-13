@@ -39,6 +39,7 @@ public class Principal extends javax.swing.JFrame {
     public static ArrayList<InfoImage> grafosTransiciones =new ArrayList();
     public static int narbol=0;
     public static int nsiguiente=0;
+    public static int ntransicion=0;
     
     /**
      * Creates new form Principal
@@ -112,6 +113,7 @@ public class Principal extends javax.swing.JFrame {
             this.ponerSiguiente();
             
         }else if(opcion.equals("Transiciones")){
+            this.ponerTransicion();
             
         }else if(opcion.equals("Automatas")){
             
@@ -149,6 +151,20 @@ public class Principal extends javax.swing.JFrame {
         Icon iconoscale=new ImageIcon(imgscale);
         lblimage.setIcon(iconoscale);
         
+    }
+    public void ponerTransicion(){
+        if(ntransicion>Principal.grafosTransiciones.size()-1){
+            ntransicion=0;
+        }
+        
+        if(ntransicion<0){
+            ntransicion=Principal.grafosTransiciones.size()-1;
+        }
+        lblNombre.setText(Principal.grafosTransiciones.get(ntransicion).getTitle());
+        ImageIcon icon=new ImageIcon(Principal.grafosTransiciones.get(ntransicion).getPath());
+        Image imgscale=icon.getImage().getScaledInstance(lblimage.getWidth(), lblimage.getHeight(), Image.SCALE_SMOOTH);
+        Icon iconoscale=new ImageIcon(imgscale);
+        lblimage.setIcon(iconoscale);
     }
     
 
@@ -412,6 +428,10 @@ public class Principal extends javax.swing.JFrame {
         }else if(jComboBox1.getSelectedItem().toString()=="Siguientes"){
             nsiguiente++;
             this.ponerSiguiente();
+        }else if(jComboBox1.getSelectedItem().toString()=="Transiciones"){
+            ntransicion++;
+            this.ponerTransicion();
+        
         }
         
     }//GEN-LAST:event_btnAbrir4ActionPerformed
@@ -425,6 +445,9 @@ public class Principal extends javax.swing.JFrame {
             nsiguiente--;
             this.ponerSiguiente();
         
+        }else if(jComboBox1.getSelectedItem().toString()=="Transiciones"){
+            ntransicion--;
+            this.ponerTransicion();
         }
     }//GEN-LAST:event_btnAbrir5ActionPerformed
 

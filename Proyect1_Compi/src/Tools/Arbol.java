@@ -29,7 +29,7 @@ public class Arbol {
     private LinkedList<Siguiente> siguientes;
     private LinkedList<Traslado> traslados;
     private int cont;
-    LinkedList<Traslado> tabladetraslados;
+    //LinkedList<Traslado> tabladetraslados;
     
     public Arbol(Nodo raiz,String Nombre) {
         this.raiz = raiz;
@@ -38,7 +38,7 @@ public class Arbol {
         this.siguientes=new LinkedList();
         this.traslados=new LinkedList();
         this.cont=-1;
-        this.tabladetraslados=new LinkedList();
+        //this.tabladetraslados=new LinkedList();
     }
 
     public String getNombre() {
@@ -60,7 +60,51 @@ public class Arbol {
         this.GenerarDot(grafica, this.nombre);
         //this.verTablaSiguientes();
         this.GenerarDotSiguientes(this.generarTablaSiguientes(), this.nombre);
-        //this.generarTabladeTransiciones();
+        this.generarTabladeTransiciones();
+        
+        this.generarTablaTransiciones();
+        //this.comparacionListas();
+        
+    }
+    public void comparacionListas(){
+        LinkedList<Integer> lista1=new LinkedList();
+        LinkedList<Integer> lista2=new LinkedList();
+        
+        ArrayList lista3=new ArrayList();
+        ArrayList lista4=new ArrayList();
+        
+        lista1.add(1);
+        lista1.add(2);
+        lista1.add(3);
+        lista1.add(4);
+        
+        lista2.add(1);
+        lista2.add(2);
+        lista2.add(3);
+        lista2.add(4);
+        
+        if(lista1.equals(lista2)){
+            System.out.println("SI SON IGUALES LOS LINKEDLIST");
+        }else{
+            System.out.println("NO SON IGUALES LOS LINKEDLIST");
+        }
+        
+        lista3.add(1);
+        lista3.add(2);
+        lista3.add(3);
+        lista3.add(4);
+        
+        lista4.add(1);
+        lista4.add(2);
+        lista4.add(3);
+        lista4.add(4);
+        
+        if(lista3.equals(lista4)){
+            System.out.println("SI SON IGUALES LOS ARRAYLIST");
+        }else{
+            System.out.println("NO SON IGUALES LOS ARRAYLIST");
+        }
+        
         
     }
     private String Graficar(Nodo nodo,String i){
@@ -166,6 +210,8 @@ public class Arbol {
                 Principal.Arboles.add(info);
             }else if(tipoOper==2){
                 Principal.grafosSiguientes.add(info);
+            }else if(tipoOper==3){
+                Principal.grafosTransiciones.add(info);
             }
             
         } catch (Exception ex) {
@@ -623,22 +669,44 @@ public class Arbol {
         
         
         Estado init=new Estado(this.generarEstado());
-        System.out.println("Firsts de la raiz\n");
+        //System.out.println("Firsts de la raiz\n");
         for (int i = 0; i < this.raiz.getFirst().size(); i++) {
             //System.out.println(this.raiz.getFirst().get(i));
-            init.addElement(this.raiz.getFirst().get(i));
+            init.addElement(this.raiz.getFirst().get(i));                                                                                                                                                     
         }
         Traslado inicial=new Traslado(init,lista);
         
-        this.tabladetraslados.add(inicial);
+        this.traslados.add(inicial);
         boolean salida=false;
+        Traslado aux=new Traslado();
+        int cont=0;
         while(salida!=true){
+            
+            
+            
+            //Aca se elige al estado que no se ha usado.
             for (int i = 0; i < this.traslados.size(); i++) {
+
                 if(this.traslados.get(i).getEstado().getUtilizada()=='N'){
-                    for(int j = 0;j<this.traslados.get(i).getEstado().getElementos().size();j++){//recorrer los elementos del estado
-                        for (int k = 0; k < this.siguientes.size(); k++) {
-                            if(this.traslados.get(i).getEstado().getElementos().get(j)==this.siguientes.get(k).getId()){
-                                //aqui se comparan los elementos de los estados con los ids de la table de siguientes
+            
+                    aux=this.traslados.get(i);
+                    break;
+                }
+                
+                
+                
+            }
+            //codigo  para asignar elementos a los auxiliares del de cada terminal
+            for (int i = 0; i < aux.getTerminales().size(); i++) {
+                for (int j = 0; j < this.siguientes.size(); j++) {
+                    
+                    if(aux.getTerminales().get(i).getTerminal().equals(this.siguientes.get(j).getTerminal())){
+                        for (int k = 0; k < aux.getEstado().getElementos().size(); k++) {
+                            if(aux.getEstado().getElementos().get(k)==this.siguientes.get(j).getId()){
+                                for (int l = 0; l < this.siguientes.get(j).getFollows().size(); l++) {
+                                    aux.getTerminales().get(i).addItem(this.siguientes.get(j).getFollows().get(l)); //Se asigno los follow a la lista auxiliar de el terminal
+                                    
+                                }
                             }
                             
                         }
@@ -648,10 +716,149 @@ public class Arbol {
                 
             }
             
-            salida=true;
+            
+            
+           
+            
+           
+            //Aqui podre ver que elementos tendra cada terminal
+            
+            
+            
+            /*System.out.print(aux.getEstado().getNombre()+" ");
+            
+            System.out.print(" elementos:  ");
+                for (int j = 0; j < aux.getEstado().getElementos().size(); j++) {
+                    System.out.print("  "+aux.getEstado().getElementos().get(j));
+                    
+                }
+            for (int i = 0; i < aux.getTerminales().size(); i++) {
+                
+                
+                
+                
+                System.out.print("   "+aux.getTerminales().get(i).getTerminal()+" listaAux: ");
+                for (int j = 0; j < aux.getTerminales().get(i).getAux().size(); j++) {
+                    System.out.print("  "+aux.getTerminales().get(i).getAux().get(j));
+                }
+                
+                
+            }
+            System.out.println("\n---------");*/
+            
+            
+           
+            for (int j = 0; j < aux.getTerminales().size(); j++) {
+                int coincidencia=0;
+                
+                if(aux.getTerminales().get(j).getAux().size()==0){
+                    coincidencia=2;
+                }else{
+                    for (int i = 0; i < this.traslados.size(); i++) {
+                    
+                    
+                    
+                    
+                        if(aux.getTerminales().get(j).getAux().equals(this.traslados.get(i).getEstado().getElementos())){
+                            coincidencia=1;
+                            //System.out.println("SI ENCONTRO COINCIDENCIA");
+                            aux.getTerminales().get(j).setEstado(this.traslados.get(i).getEstado().getNombre());
+                        }
+                    }
+                    
+                }
+                
+                
+                
+                if(coincidencia==0){
+                    //System.out.println("NO ENCONTRO COINCIDENCIA");
+                    for (int i = 0; i < aux.getTerminales().size(); i++) {
+                        
+                        
+                    //si no se le ha asignado un estado y tiene elementos auxiliares
+                        if(aux.getTerminales().get(i).getEstado()=="" && aux.getTerminales().get(i).getAux().size()!=0){
+                            Estado nuevo=new Estado(this.generarEstado());//Se genera un nuevo estado correlativo
+                            nuevo.setListaElementos(aux.getTerminales().get(i).getAux());
+                            Traslado nuevotraslado=new Traslado(nuevo,this.getTerminales());
+                            this.traslados.add(nuevotraslado);
+                            aux.getTerminales().get(i).setEstado(nuevo.getNombre());
+                        }
+                    
+                    }
+                    
+                }
+                
+                    
+                    
+            }
+            /*System.out.print("Estado: "+aux.getEstado().getNombre());
+            for (int i = 0; i < aux.getTerminales().size(); i++) {
+                for (int j = 0; j < aux.getEstado().getElementos().size(); j++) {
+                    System.out.print("  "+aux.getEstado().getElementos().get(j));
+                    
+                }
+                
+                System.out.print("  "+aux.getTerminales().get(i).getEstado()+"  ");
+                
+                System.out.print(" terminal: "+aux.getTerminales().get(i).getTerminal());
+                for (int j = 0; j < aux.getTerminales().get(i).getAux().size(); j++) {
+                    System.out.print("  "+aux.getTerminales().get(i).getAux().get(j)+" ");
+                }
+                
+                
+            }
+            System.out.println("\n");*/
+            
+            aux.getEstado().setUtilizada('U'); // Don por hecho que ya fue utilizada completamente
+            
+             //desde aca puedo pasar el auxiliar y asinarlo para mostrar las transiciones
+            for (int i = 0; i < this.traslados.size(); i++) {
+                if(this.traslados.get(i).getEstado().getNombre()==aux.getEstado().getNombre()){
+                    this.traslados.get(i).getEstado().setUtilizada(aux.getEstado().getUtilizada());
+                    this.traslados.get(i).setTerminales(aux.getTerminales());
+                }
+                
+            }
+            
+            int contU=0;
+            for (int i = 0; i < this.traslados.size(); i++) {
+                if(this.traslados.get(i).getEstado().getUtilizada()=='U'){
+                    contU++;
+                }
+                
+            }
+            
+            if(contU==this.traslados.size()){
+                //System.out.println("TODOS LOS ELEMENTOS YA HAN SIDO USADOS");
+                salida=true;
+            }
+            
+            
+            
+            
+
+//            if(cont==3){
+//                salida=true;
+//            }
+//            cont++;
         }
-        System.out.println("SI SALIO XD");
-        
+        System.out.println("******************************************");
+        //GENERA LA TABLA DE TRANSICIONES
+        /*for (int i = 0; i < this.traslados.size(); i++) {
+                System.out.print(this.traslados.get(i).getEstado().getNombre()+" ");
+                
+                for (int j = 0; j < this.traslados.get(i).getEstado().getElementos().size(); j++) {
+                    System.out.print(" "+this.traslados.get(i).getEstado().getElementos().get(j));
+                }
+                for (int j = 0; j < this.traslados.get(i).getTerminales().size(); j++) {
+                    System.out.print("   terminal: "+this.traslados.get(i).getTerminales().get(j).getTerminal()+"  "+this.traslados.get(i).getTerminales().get(j).getEstado());
+                    
+                }
+                
+                System.out.print("   utilizada: "+this.traslados.get(i).getEstado().getUtilizada());
+                System.out.println("\n");
+        }
+        */
         
         
     }
@@ -683,6 +890,108 @@ public class Arbol {
             c++;
         }
         return aux;
+    }
+    
+    public void generarTablaTransiciones(){
+        String resultado="";
+        resultado+="graph G{\n\n";
+        resultado+="node[shape=record, fontname=\"Arial\"];";
+        
+        String[] arreglo=new String[this.traslados.get(0).getTerminales().size()+1];
+        arreglo[0]="Estado|";
+        for (int i = 0; i < this.traslados.get(0).getTerminales().size(); i++) {
+            arreglo[i+1]="Terminal";
+        }
+        
+        
+        for (int i = 0; i < this.traslados.get(0).getTerminales().size(); i++) {
+            String terminal=this.traslados.get(0).getTerminales().get(i).getTerminal().replace("\"", "'");
+            arreglo[i+1]+="|"+terminal;
+        }
+        
+        
+        
+        for (int i = 0; i < this.traslados.size(); i++) {
+            arreglo[0]+="|"+this.traslados.get(i).getEstado().getNombre()+"(";
+            int c=0;
+            for (int j = 0; j < this.traslados.get(i).getEstado().getElementos().size(); j++) {
+                if(c==0){
+                    arreglo[0]+=this.traslados.get(i).getEstado().getElementos().get(j);
+                }else{
+                    arreglo[0]+=", "+this.traslados.get(i).getEstado().getElementos().get(j);
+                
+                }
+                c++;
+                
+            }
+            arreglo[0]+=")";
+            
+        }
+        
+        for (int i = 0; i < this.traslados.size(); i++) {
+            for (int j = 0; j < this.traslados.get(i).getTerminales().size(); j++) {
+                if(this.traslados.get(i).getTerminales().get(j).getEstado()==""){
+                    arreglo[j+1]+="|---";
+                }else{
+                    arreglo[j+1]+="|"+this.traslados.get(i).getTerminales().get(j).getEstado();
+                }
+                
+                
+            }
+            
+        }
+        
+        
+        
+        resultado+="set1 [label=\"\n";
+        int c=0;
+        for (int i = 0; i < arreglo.length; i++) {
+            if(c==0){
+                resultado+="{"+arreglo[i]+"}\n";
+            }else{
+                resultado+="|{"+arreglo[i]+"}\n";
+            }
+            c++;
+           
+            
+        }
+        resultado+="\"];\n}";
+        
+        this.generarDotTransiciones(resultado, this.nombre);
+    
+    }
+    public void generarDotTransiciones(String contenido,String nombre){
+        
+        FileWriter fichero = null;
+        BufferedWriter bw=null;
+        try{
+            String ruta="C:/Users/elari/Desktop/2021/1er Semestre/ReportesCompi1/Transiciones_201700404/";
+            File file =new File(ruta+nombre+".dot");
+            if(!file.exists()){
+                file.createNewFile();
+            }
+            
+            
+            
+            fichero = new FileWriter(file);
+            
+            bw =new BufferedWriter(fichero);
+            
+            bw.write(contenido);
+            bw.close();
+            fichero.close();
+            Ejecutar(ruta,nombre,3);
+//            escritor = new PrintWriter(fichero);
+//            escritor.println(cadena);
+//            escritor.close();
+//            fichero.close();
+//            Ejecutar(nombre);
+        } catch (Exception e) {
+            System.out.println("error en generar dot");
+            e.printStackTrace();
+        }
+        
+    
     }
     
     

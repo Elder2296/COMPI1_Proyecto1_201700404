@@ -5,6 +5,8 @@
  */
 package Tools;
 
+import java.util.LinkedList;
+
 /**
  *
  * @author elari
@@ -12,9 +14,11 @@ package Tools;
 public class Terminal {
     private String terminal;
     private String estado;
+    private LinkedList<Integer> aux;
     public Terminal(String terminal){
         this.terminal=terminal;
         this.estado="";
+        this.aux=new LinkedList();
     }
 
     public String getTerminal() {
@@ -31,6 +35,12 @@ public class Terminal {
 
     public void setEstado(String estado) {
         this.estado = estado;
+    }
+    public LinkedList<Integer> getAux(){
+        return this.aux;
+    }
+    public void addItem(int element){
+        this.aux.add(element);
     }
     
 }

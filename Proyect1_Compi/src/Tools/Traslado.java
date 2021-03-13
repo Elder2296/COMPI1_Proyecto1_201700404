@@ -21,6 +21,8 @@ public class Traslado {
         this.terminales=terminales;
     
     }
+    public Traslado(){
+    }
 
     public Estado getEstado() {
         return estado;
