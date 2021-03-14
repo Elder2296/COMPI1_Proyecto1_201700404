@@ -58,7 +58,9 @@ terminal dos_puntos,
         interrogacion,
         suma,
         coma,
-        raro;
+        raro,
+        comillasimple,
+        salto;
 
 //------> declaracion de no terminales
 non terminal LinkedList<Expresion>       INICIO, SENTENCIAS;
@@ -113,7 +115,11 @@ ER              ::=     concatenar ER:a ER:b                                    
                         | interrogacion ER:b                                                    {: RESULT= new Nodo("?","",-1,null,b); :}
                         | llaveAbre id:a llaveCierra                                            {: Nodo nodo = new Nodo(a.toString(),"",parser.nhojas,null,null); nodo.setAnulabilidad('N');RESULT = nodo; parser.nhojas++; :}
                         | cadena:a                                                              {: Nodo nodo = new Nodo(a.toString(),"",parser.nhojas,null,null); nodo.setAnulabilidad('N');RESULT = nodo; parser.nhojas++; :}
-                        ;
+                        | raro:a                                                                {: Nodo nodo = new Nodo(a.toString(),"",parser.nhojas,null,null); nodo.setAnulabilidad('N');RESULT = nodo; parser.nhojas++; :}
+                        | id:a                                                                  {: Nodo nodo = new Nodo(a.toString(),"",parser.nhojas,null,null); nodo.setAnulabilidad('N');RESULT = nodo; parser.nhojas++; :}
+                        | comillasimple:a                                                       {: Nodo nodo = new Nodo(a.toString(),"",parser.nhojas,null,null); nodo.setAnulabilidad('N');RESULT = nodo; parser.nhojas++; :}                                                     
+                        | salto:a                                                               {: Nodo nodo = new Nodo(a.toString(),"",parser.nhojas,null,null); nodo.setAnulabilidad('N');RESULT = nodo; parser.nhojas++; :}                         
+                        ;   
 
 CONJUNTO        ::=      conjunto dos_puntos id guion mayorque NOTACION puntoYcoma
                         ;

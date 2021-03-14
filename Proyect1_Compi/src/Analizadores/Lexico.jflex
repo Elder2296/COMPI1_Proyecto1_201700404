@@ -17,7 +17,7 @@ import Frame.Principal;
 
 digito              = [0-9]+
 letra               = [a-zA-ZÑñ]+
-raro                = [!,#,$,&,',-,/,<,=,>,@,_,`,]
+raro                = [!,#,$,&,-,/,<,=,>,@,(,),[,],_,`]
 id                  = {letra}({letra}|{digito}|"_")*
 cadena              = [\"][^\"\n]+[\"]
 
@@ -50,7 +50,8 @@ comentariomulti     = "<!"({inputstream}* {LineTerminator})+"!>"
 "+"         { System.out.println("Reconocio "+yytext()+" suma"); return new Symbol(Simbolos.suma, yycolumn, yyline, yytext()); }
 "?"         { System.out.println("Reconocio "+yytext()+" interrogacion"); return new Symbol(Simbolos.interrogacion, yycolumn, yyline, yytext()); }
 ","         { System.out.println("Reconocio "+yytext()+" coma"); return new Symbol(Simbolos.coma, yycolumn, yyline, yytext()); }
-
+"\\'"        { System.out.println("Reconocio "+yytext()+" comilllasimple"); return new Symbol(Simbolos.comillasimple, yycolumn, yyline, yytext()); }
+"\\n"       { System.out.println("Reconocio "+yytext()+" salto"); return new Symbol(Simbolos.salto, yycolumn, yyline, yytext()); }  
 
 
 //----->Palabras Reservadas

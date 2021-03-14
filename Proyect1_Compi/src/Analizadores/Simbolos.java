@@ -14,6 +14,8 @@ public class Simbolos {
   public static final int conjunto = 13;
   public static final int coma = 19;
   public static final int puntoYcoma = 6;
+  public static final int salto = 22;
+  public static final int comillasimple = 21;
   public static final int or = 9;
   public static final int dos_puntos = 2;
   public static final int llaveAbre = 10;
@@ -50,7 +52,9 @@ public class Simbolos {
   "interrogacion",
   "suma",
   "coma",
-  "raro"
+  "raro",
+  "comillasimple",
+  "salto"
   };
 }
 
