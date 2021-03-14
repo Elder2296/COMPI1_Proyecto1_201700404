@@ -1,0 +1,140 @@
+/*--------------- 1ra Area: Codigo de Usuario -----------------------*/
+//-------> importaciones, paquetes
+package Analizadores;
+import java_cup.runtime.Symbol;
+import Tools.*;
+import Frame.Principal;
+
+import java.util.LinkedList;
+
+//------> Codigo para el parser,variables, metodos
+parser code
+{:
+        public static Nodo raiz;
+        public static LinkedList<Expresion> lista_er;
+        public int nhojas=1;
+
+        public void syntax_error(Symbol s)
+        {
+            System.err.println("Error en la Linea " + (s.right+1) +" Columna "+(s.left+1)+ ". Identificador "+s.value + " no reconocido. Se ha recuperado del error." );
+            error nuevo = new error("Error Sintactico (Recuperado)", s.value.toString(), s.right+1, s.left+1);
+            Principal.listaErrores.add(nuevo);
+        }
+        public void unrecovered_syntax_error(Symbol s) throws java.lang.Exception
+        {
+            System.err.println("Error en la Linea " + (s.right+1)+ " Columna "+(s.left+1)+". Identificador " +s.value + " no reconocido.");
+            error nuevo = new error("Error Sintactico", s.value.toString(), s.right+1, s.left+1);
+            Principal.listaErrores.add(nuevo);
+        }
+        public Nodo getRaiz(){
+            return raiz;
+        }
+
+:}
+
+//------> Codigo para las acciones gramaticales
+action code
+{:  :}
+
+/*--------------- 2da Area: Declaraciones -----------------------*/
+
+//------> declaracion de terminales 
+
+terminal dos_puntos, 
+        guion,
+        mayorque,
+        del_al,
+        puntoYcoma, 
+        concatenar,
+        kleen,
+        or,
+        llaveAbre,
+        llaveCierra,
+        porciento,
+        conjunto,
+        digito,
+        id,
+        cadena,
+        interrogacion,
+        suma,
+        coma,
+        raro,
+        comillasimple,
+        salto;
+
+//------> declaracion de no terminales
+non terminal LinkedList<Expresion>       INICIO, SENTENCIAS;
+
+non terminal Expresion                  DEF_EXP,CONJUNTO,NOTACION;
+
+non terminal Nodo                       ER;
+                
+non terminal                        
+                                    EVALUACIONES,
+                                    EVALUAR;
+
+
+precedence right concatenar;
+precedence right or,del_al;
+precedence right kleen, suma,interrogacion,coma;
+                    
+
+start with INICIO;
+
+/*--------------- 3ra Area: Reglas Semanticas -----------------------*/
+INICIO          ::=     llaveAbre SENTENCIAS:a porciento porciento porciento porciento EVALUACIONES  llaveCierra  {: parser.lista_er=a;:}
+                        | error;
+
+SENTENCIAS      ::=                                                              
+                        SENTENCIAS:a DEF_EXP:b                                                {:RESULT=a; RESULT.add(b); :}
+                        | DEF_EXP:a                                                             {:RESULT = new LinkedList<>();RESULT.add(a); :}
+                        | SENTENCIAS:a CONJUNTO:b                                                   {:RESULT=a;  :}
+                        | CONJUNTO:a                                                              {:RESULT = new LinkedList<>();:}
+                        | error
+                        ;
+
+EVALUACIONES    ::=     EVALUACIONES EVALUAR
+                        | EVALUAR
+                        |error
+                        ;   
+EVALUAR         ::=     id dos_puntos cadena puntoYcoma
+                        ;
+
+
+DEF_EXP         ::=     id:a guion mayorque ER:b puntoYcoma                                             {:RESULT = new Expresion(a.toString(), new Arbol(b,a.toString())); :}
+                        
+                        ;
+
+
+
+
+ER              ::=     concatenar ER:a ER:b                                                    {: RESULT= new Nodo(".","",-1,a,b); :}
+                        | or ER:a ER:b                                                          {: RESULT= new Nodo("|","",-1,a,b); :}
+                        | kleen ER:b                                                            {: RESULT= new Nodo("*","",-1,null,b); :}
+                        | suma ER:s                                                             {: RESULT= new Nodo("+","",-1,null,s); :}               
+                        | interrogacion ER:b                                                    {: RESULT= new Nodo("?","",-1,null,b); :}
+                        | llaveAbre id:a llaveCierra                                            {: Nodo nodo = new Nodo(a.toString(),"",parser.nhojas,null,null); nodo.setAnulabilidad('N');RESULT = nodo; parser.nhojas++; :}
+                        | cadena:a                                                              {: Nodo nodo = new Nodo(a.toString(),"",parser.nhojas,null,null); nodo.setAnulabilidad('N');RESULT = nodo; parser.nhojas++; :}
+                        | raro:a                                                                {: Nodo nodo = new Nodo(a.toString(),"",parser.nhojas,null,null); nodo.setAnulabilidad('N');RESULT = nodo; parser.nhojas++; :}
+                        | id:a                                                                  {: Nodo nodo = new Nodo(a.toString(),"",parser.nhojas,null,null); nodo.setAnulabilidad('N');RESULT = nodo; parser.nhojas++; :}
+                        | comillasimple:a                                                       {: Nodo nodo = new Nodo(a.toString(),"",parser.nhojas,null,null); nodo.setAnulabilidad('N');RESULT = nodo; parser.nhojas++; :}                                                     
+                        | salto:a                                                               {: Nodo nodo = new Nodo(a.toString(),"",parser.nhojas,null,null); nodo.setAnulabilidad('N');RESULT = nodo; parser.nhojas++; :}                         
+                        ;   
+
+CONJUNTO        ::=      conjunto dos_puntos id guion mayorque NOTACION puntoYcoma
+                        ;
+
+
+NOTACION        ::=     NOTACION coma   NOTACION
+                        | NOTACION del_al NOTACION
+                        | id
+                        | digito
+                        | raro
+                        ;
+
+
+
+
+
+
+

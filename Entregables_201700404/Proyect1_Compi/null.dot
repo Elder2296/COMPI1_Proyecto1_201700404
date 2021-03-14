@@ -1,0 +1,20 @@
+Digraph Arbol_Sintactio {
+
+ node 0 [label ="."];
+node0 -> node 00
+ node 00 [label ="digito"];
+node0 -> node 01
+ node 01 [label ="*"];
+node01 -> node 010
+ node 010 [label ="|"];
+node010 -> node 0100
+ node 0100 [label =""_""];
+node010 -> node 0101
+ node 0101 [label ="|"];
+node0101 -> node 01010
+ node 01010 [label ="letra"];
+node0101 -> node 01011
+ node 01011 [label ="digito"];
+
+
+}
