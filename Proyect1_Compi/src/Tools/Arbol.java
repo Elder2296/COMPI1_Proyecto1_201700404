@@ -724,30 +724,7 @@ public class Arbol {
            
             
            
-            //Aqui podre ver que elementos tendra cada terminal
-            
-            
-            
-            /*System.out.print(aux.getEstado().getNombre()+" ");
-            
-            System.out.print(" elementos:  ");
-                for (int j = 0; j < aux.getEstado().getElementos().size(); j++) {
-                    System.out.print("  "+aux.getEstado().getElementos().get(j));
-                    
-                }
-            for (int i = 0; i < aux.getTerminales().size(); i++) {
-                
-                
-                
-                
-                System.out.print("   "+aux.getTerminales().get(i).getTerminal()+" listaAux: ");
-                for (int j = 0; j < aux.getTerminales().get(i).getAux().size(); j++) {
-                    System.out.print("  "+aux.getTerminales().get(i).getAux().get(j));
-                }
-                
-                
-            }
-            System.out.println("\n---------");*/
+         
             
             
            
@@ -775,48 +752,31 @@ public class Arbol {
                 
                 if(coincidencia==0){
                     //System.out.println("NO ENCONTRO COINCIDENCIA");
-                    for (int i = 0; i < aux.getTerminales().size(); i++) {
+                    
                         
                         
                     //si no se le ha asignado un estado y tiene elementos auxiliares
-                        if(aux.getTerminales().get(i).getEstado()=="" && aux.getTerminales().get(i).getAux().size()!=0){
+                        if(aux.getTerminales().get(j).getEstado()=="" && aux.getTerminales().get(j).getAux().size()!=0){
                             Estado nuevo=new Estado(this.generarEstado());//Se genera un nuevo estado correlativo
-                            nuevo.setListaElementos(aux.getTerminales().get(i).getAux());
+                            nuevo.setListaElementos(aux.getTerminales().get(j).getAux());
                             Traslado nuevotraslado=new Traslado(nuevo,this.getTerminales());
                             this.traslados.add(nuevotraslado);
-                            aux.getTerminales().get(i).setEstado(nuevo.getNombre());
+                            aux.getTerminales().get(j).setEstado(nuevo.getNombre());
                         }
                     
-                    }
+                    
                     
                 }
                 
                     
                     
             }
-            /*System.out.print("Estado: "+aux.getEstado().getNombre());
-            for (int i = 0; i < aux.getTerminales().size(); i++) {
-                for (int j = 0; j < aux.getEstado().getElementos().size(); j++) {
-                    System.out.print("  "+aux.getEstado().getElementos().get(j));
-                    
-                }
-                
-                System.out.print("  "+aux.getTerminales().get(i).getEstado()+"  ");
-                
-                System.out.print(" terminal: "+aux.getTerminales().get(i).getTerminal());
-                for (int j = 0; j < aux.getTerminales().get(i).getAux().size(); j++) {
-                    System.out.print("  "+aux.getTerminales().get(i).getAux().get(j)+" ");
-                }
-                
-                
-            }
-            System.out.println("\n");*/
             
             aux.getEstado().setUtilizada('U'); // Don por hecho que ya fue utilizada completamente
             
              //desde aca puedo pasar el auxiliar y asinarlo para mostrar las transiciones
             for (int i = 0; i < this.traslados.size(); i++) {
-                if(this.traslados.get(i).getEstado().getNombre()==aux.getEstado().getNombre()){
+                if(this.traslados.get(i).getEstado().getNombre().equals(aux.getEstado().getNombre())){
                     this.traslados.get(i).getEstado().setUtilizada(aux.getEstado().getUtilizada());
                     this.traslados.get(i).setTerminales(aux.getTerminales());
                 }
